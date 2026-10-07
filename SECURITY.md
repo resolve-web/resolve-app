@@ -6,7 +6,7 @@ Security fixes are applied to the latest `main` branch of this repository.
 
 ## Reporting a vulnerability
 
-Please report security issues privately to **security@resolve.local**.
+Please use [GitHub private vulnerability reporting](https://github.com/resolve-web/resolve-app/security/advisories/new).
 
 Include:
 
