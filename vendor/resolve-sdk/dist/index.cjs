@@ -177,8 +177,15 @@ function resolveErrorTypes() {
   return out;
 }
 var PLACEHOLDER_CONTRACT_ID = "CXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-function assertOverrideContractId(config) {
-  if (!config.contractId || config.contractId === PLACEHOLDER_CONTRACT_ID || !config.contractId.startsWith("C")) ;
+function assertContractId(contractId) {
+  if (!contractId || contractId === PLACEHOLDER_CONTRACT_ID) {
+    throw new Error(
+      "contractId must be a real deployed Resolve contract ID (override the preset placeholder)"
+    );
+  }
+  if (!stellarSdk.StrKey.isValidContract(contractId)) {
+    throw new Error(`contractId is not a valid Stellar contract address: ${contractId}`);
+  }
 }
 var TESTNET = {
   networkPassphrase: stellarSdk.Networks.TESTNET,
@@ -193,24 +200,20 @@ var FUTURENET = {
   contractId: PLACEHOLDER_CONTRACT_ID
 };
 function withContractId(base, contractId, overrides = {}) {
-  if (!contractId || contractId === PLACEHOLDER_CONTRACT_ID) {
-    throw new Error(
-      "contractId must be a real deployed Resolve contract ID (override the preset placeholder)"
-    );
-  }
+  assertContractId(contractId);
   const config = {
     ...base,
     ...overrides,
     contractId
   };
-  assertOverrideContractId(config);
   return config;
 }
 var networks = {
   testnet: TESTNET,
   futurenet: FUTURENET,
   withContractId,
-  PLACEHOLDER_CONTRACT_ID
+  PLACEHOLDER_CONTRACT_ID,
+  assertContractId
 };
 
 // src/types.ts
@@ -240,9 +243,31 @@ var CONTRACT_LIMITS = {
   MAX_QUESTION_LEN: 256,
   MAX_DESCRIPTION_LEN: 1024,
   MIN_MARKET_DURATION_SECS: 60n,
+  MAX_MARKET_DURATION_SECS: 120n * 24n * 60n * 60n,
   MIN_RESOLUTION_TIMEOUT_SECS: 3600n,
-  MAX_RESOLUTION_TIMEOUT_SECS: 365n * 24n * 60n * 60n
+  MAX_RESOLUTION_TIMEOUT_SECS: 30n * 24n * 60n * 60n
 };
+
+// src/validation.ts
+function asBigInt(value) {
+  if (typeof value === "number" && !Number.isSafeInteger(value)) {
+    throw new Error("timestamp values must be safe integers");
+  }
+  return BigInt(value);
+}
+function validateCreateMarket(params, nowSeconds = BigInt(Math.floor(Date.now() / 1e3))) {
+  if (!stellarSdk.StrKey.isValidEd25519PublicKey(params.creator)) throw new Error("creator must be a valid Stellar account");
+  if (!stellarSdk.StrKey.isValidEd25519PublicKey(params.resolver)) throw new Error("resolver must be a valid Stellar account");
+  if (!stellarSdk.StrKey.isValidContract(params.token)) throw new Error("token must be a valid Stellar contract address");
+  const questionBytes = new TextEncoder().encode(params.question).length;
+  const descriptionBytes = new TextEncoder().encode(params.description).length;
+  if (questionBytes === 0 || questionBytes > CONTRACT_LIMITS.MAX_QUESTION_LEN) throw new Error("question length is outside contract limits");
+  if (descriptionBytes > CONTRACT_LIMITS.MAX_DESCRIPTION_LEN) throw new Error("description length is outside contract limits");
+  const duration = asBigInt(params.closeAt) - nowSeconds;
+  if (duration < CONTRACT_LIMITS.MIN_MARKET_DURATION_SECS || duration > CONTRACT_LIMITS.MAX_MARKET_DURATION_SECS) throw new Error("market duration is outside contract limits");
+  const timeout = asBigInt(params.resolutionTimeout);
+  if (timeout < CONTRACT_LIMITS.MIN_RESOLUTION_TIMEOUT_SECS || timeout > CONTRACT_LIMITS.MAX_RESOLUTION_TIMEOUT_SECS) throw new Error("resolution timeout is outside contract limits");
+}
 
 // src/client.ts
 function toBigInt(value) {
@@ -427,15 +452,10 @@ function validateConfig(config) {
   if (!config.networkPassphrase) {
     throw new Error("ResolveClient: networkPassphrase is required");
   }
-  if (!config.contractId || config.contractId === PLACEHOLDER_CONTRACT_ID) {
-    throw new Error(
-      "ResolveClient: contractId must be a real deployed contract ID (override the network preset placeholder)"
-    );
-  }
-  if (!config.contractId.startsWith("C")) {
-    throw new Error(
-      `ResolveClient: contractId looks invalid (expected C...): ${config.contractId}`
-    );
+  try {
+    assertContractId(config.contractId);
+  } catch (error) {
+    throw new Error(`ResolveClient: ${error.message}`);
   }
 }
 function rethrowContractError(err) {
@@ -501,6 +521,7 @@ var ResolveClient = class _ResolveClient {
    * Build `create_market`. Returns AssembledTransaction whose result is the new market id.
    */
   async createMarket(params, opts) {
+    validateCreateMarket(params);
     return this.buildTx(
       "create_market",
       [
@@ -784,6 +805,22 @@ function parseClaimKind(value) {
   }
   throw new RangeError(`invalid ClaimKind: ${value}`);
 }
+function parseDeployment(value) {
+  if (!value || typeof value !== "object") throw new Error("deployment manifest must be an object");
+  const item = value;
+  for (const key of ["network", "networkPassphrase", "rpcUrl", "contractId", "settlementTokenId", "deployedAt"]) {
+    if (typeof item[key] !== "string" || item[key] === "") throw new Error(`deployment manifest is missing ${key}`);
+  }
+  if (!stellarSdk.StrKey.isValidContract(item.contractId)) throw new Error("deployment contractId is invalid");
+  if (!stellarSdk.StrKey.isValidContract(item.settlementTokenId)) throw new Error("deployment settlementTokenId is invalid");
+  try {
+    new URL(item.rpcUrl);
+  } catch {
+    throw new Error("deployment rpcUrl is invalid");
+  }
+  if (Number.isNaN(Date.parse(item.deployedAt))) throw new Error("deployment deployedAt is invalid");
+  return item;
+}
 
 Object.defineProperty(exports, "basicNodeSigner", {
   enumerable: true,
@@ -803,6 +840,7 @@ exports.ResolveErrorCode = ResolveErrorCode;
 exports.ResolveEventName = ResolveEventName;
 exports.Side = Side;
 exports.TESTNET = TESTNET;
+exports.assertContractId = assertContractId;
 exports.claimedTopics = claimedTopics;
 exports.decodeEventTopic = decodeEventTopic;
 exports.fromContractAmount = fromContractAmount;
@@ -813,6 +851,7 @@ exports.marketInvalidatedTopics = marketInvalidatedTopics;
 exports.marketResolvedTopics = marketResolvedTopics;
 exports.networks = networks;
 exports.parseClaimKind = parseClaimKind;
+exports.parseDeployment = parseDeployment;
 exports.parseOutcome = parseOutcome;
 exports.parseResolveError = parseResolveError;
 exports.parseSide = parseSide;
@@ -821,6 +860,7 @@ exports.resolveErrorTypes = resolveErrorTypes;
 exports.scValHelpers = scValHelpers;
 exports.stakedTopics = stakedTopics;
 exports.toContractAmount = toContractAmount;
+exports.validateCreateMarket = validateCreateMarket;
 exports.withContractId = withContractId;
 //# sourceMappingURL=index.cjs.map
 //# sourceMappingURL=index.cjs.map
