@@ -35,6 +35,7 @@ Wallet → resolve-app → @resolve-protocol/sdk → Soroban RPC → Resolve Con
 | `/markets/[id]` | Market detail, stake, claim/refund |
 | `/create` | Create market |
 | `/portfolio` | Positions by category |
+| `/status` | Public deployment and indexer readiness |
 
 ## Setup
 
@@ -88,6 +89,8 @@ NEXT_PUBLIC_SETTLEMENT_TOKEN_ID=
 ## Wallet / transaction UX
 
 The app handles disconnected, connecting, wrong network, rejected signatures, failed transactions, pending confirmation, confirmed, insufficient balance, and mapped contract errors (`parseResolveError`). Stake, create, and claim flows show a **review summary** before the wallet prompt.
+
+For a repeatable submission recording, follow the [demo runbook](docs/DEMO.md).
 
 ## License
 
