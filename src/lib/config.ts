@@ -1,6 +1,7 @@
 /**
  * Public runtime configuration. Only NEXT_PUBLIC_* vars are used.
  */
+import { StrKey } from "@stellar/stellar-sdk";
 
 export type StellarNetworkName = "testnet" | "futurenet" | "mainnet" | "custom";
 
@@ -41,10 +42,17 @@ export function assertWriteConfig(config: AppConfig): void {
   if (!config.rpcUrl) missing.push("NEXT_PUBLIC_SOROBAN_RPC_URL");
   if (!config.contractId) missing.push("NEXT_PUBLIC_RESOLVE_CONTRACT_ID");
   if (!config.networkPassphrase) missing.push("NEXT_PUBLIC_NETWORK_PASSPHRASE");
+  if (!config.settlementTokenId) missing.push("NEXT_PUBLIC_SETTLEMENT_TOKEN_ID");
   if (missing.length > 0) {
     throw new Error(
       `Missing required configuration: ${missing.join(", ")}. Copy .env.example to .env.local and fill in deployment values.`,
     );
+  }
+  if (!StrKey.isValidContract(config.contractId)) {
+    throw new Error("NEXT_PUBLIC_RESOLVE_CONTRACT_ID is not a valid Stellar contract address.");
+  }
+  if (!StrKey.isValidContract(config.settlementTokenId)) {
+    throw new Error("NEXT_PUBLIC_SETTLEMENT_TOKEN_ID is not a valid Stellar contract address.");
   }
 }
 
