@@ -176,6 +176,8 @@ function resolveErrorTypes() {
   return out;
 }
 var PLACEHOLDER_CONTRACT_ID = "CXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+var TESTNET_CONTRACT_ID = "CD3YJNAYKVKT72DYPVS644OPNVNW6673TUIQWGXXA4VQD7536ARWB6MZ";
+var TESTNET_SETTLEMENT_TOKEN_ID = "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC";
 function assertContractId(contractId) {
   if (!contractId || contractId === PLACEHOLDER_CONTRACT_ID) {
     throw new Error(
@@ -190,7 +192,7 @@ var TESTNET = {
   networkPassphrase: Networks.TESTNET,
   rpcUrl: "https://soroban-testnet.stellar.org",
   horizonUrl: "https://horizon-testnet.stellar.org",
-  contractId: PLACEHOLDER_CONTRACT_ID
+  contractId: TESTNET_CONTRACT_ID
 };
 var FUTURENET = {
   networkPassphrase: Networks.FUTURENET,
@@ -212,6 +214,8 @@ var networks = {
   futurenet: FUTURENET,
   withContractId,
   PLACEHOLDER_CONTRACT_ID,
+  TESTNET_CONTRACT_ID,
+  TESTNET_SETTLEMENT_TOKEN_ID,
   assertContractId
 };
 
@@ -821,6 +825,6 @@ function parseDeployment(value) {
   return item;
 }
 
-export { CONTRACT_LIMITS, ClaimKind, FUTURENET, MarketStatus, Outcome, PLACEHOLDER_CONTRACT_ID, RESOLVE_ERROR_NUMBERS, RESOLVE_EVENT_NAMES, ResolveClient, ResolveError, ResolveErrorCode, ResolveEventName, Side, TESTNET, assertContractId, claimedTopics, decodeEventTopic, fromContractAmount, mapMarket, mapPosition, marketCreatedTopics, marketInvalidatedTopics, marketResolvedTopics, networks, parseClaimKind, parseDeployment, parseOutcome, parseResolveError, parseSide, resolveErrorCodeFromNumber, resolveErrorTypes, scValHelpers, stakedTopics, toContractAmount, validateCreateMarket, withContractId };
+export { CONTRACT_LIMITS, ClaimKind, FUTURENET, MarketStatus, Outcome, PLACEHOLDER_CONTRACT_ID, RESOLVE_ERROR_NUMBERS, RESOLVE_EVENT_NAMES, ResolveClient, ResolveError, ResolveErrorCode, ResolveEventName, Side, TESTNET, TESTNET_CONTRACT_ID, TESTNET_SETTLEMENT_TOKEN_ID, assertContractId, claimedTopics, decodeEventTopic, fromContractAmount, mapMarket, mapPosition, marketCreatedTopics, marketInvalidatedTopics, marketResolvedTopics, networks, parseClaimKind, parseDeployment, parseOutcome, parseResolveError, parseSide, resolveErrorCodeFromNumber, resolveErrorTypes, scValHelpers, stakedTopics, toContractAmount, validateCreateMarket, withContractId };
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

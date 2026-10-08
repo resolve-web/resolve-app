@@ -272,8 +272,12 @@ declare function resolveErrorTypes(): Record<number, {
  * Callers MUST override `contractId` with a real deployment before submitting txs.
  */
 declare const PLACEHOLDER_CONTRACT_ID = "CXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+/** Verified Resolve deployment on Stellar Testnet. */
+declare const TESTNET_CONTRACT_ID = "CD3YJNAYKVKT72DYPVS644OPNVNW6673TUIQWGXXA4VQD7536ARWB6MZ";
+/** Native XLM Stellar Asset Contract on Testnet, used by the reference deployment. */
+declare const TESTNET_SETTLEMENT_TOKEN_ID = "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC";
 declare function assertContractId(contractId: string): void;
-/** Stellar Testnet preset. Override `contractId` before use. */
+/** Stellar Testnet preset for the verified public deployment. */
 declare const TESTNET: ResolveNetworkConfig;
 /** Stellar Futurenet preset. Override `contractId` before use. */
 declare const FUTURENET: ResolveNetworkConfig;
@@ -286,6 +290,8 @@ declare const networks: {
     readonly futurenet: ResolveNetworkConfig;
     readonly withContractId: typeof withContractId;
     readonly PLACEHOLDER_CONTRACT_ID: "CXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+    readonly TESTNET_CONTRACT_ID: "CD3YJNAYKVKT72DYPVS644OPNVNW6673TUIQWGXXA4VQD7536ARWB6MZ";
+    readonly TESTNET_SETTLEMENT_TOKEN_ID: "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC";
     readonly assertContractId: typeof assertContractId;
 };
 
@@ -378,4 +384,4 @@ type ResolveDeployment = {
 };
 declare function parseDeployment(value: unknown): ResolveDeployment;
 
-export { CONTRACT_LIMITS, ClaimKind, type ClaimParams, type CreateMarketParams, type EventTopicFilter, FUTURENET, type InvalidateMarketParams, type Market, MarketStatus, Outcome, PLACEHOLDER_CONTRACT_ID, type Position, RESOLVE_ERROR_NUMBERS, RESOLVE_EVENT_NAMES, ResolveClient, type ResolveClientOptions, type ResolveDeployment, ResolveError, ResolveErrorCode, ResolveEventName, type ResolveMarketParams, type ResolveNetworkConfig, Side, type StakeParams, TESTNET, type TxMethodOptions, assertContractId, claimedTopics, decodeEventTopic, fromContractAmount, mapMarket, mapPosition, marketCreatedTopics, marketInvalidatedTopics, marketResolvedTopics, networks, parseClaimKind, parseDeployment, parseOutcome, parseResolveError, parseSide, resolveErrorCodeFromNumber, resolveErrorTypes, scValHelpers, stakedTopics, toContractAmount, validateCreateMarket, withContractId };
+export { CONTRACT_LIMITS, ClaimKind, type ClaimParams, type CreateMarketParams, type EventTopicFilter, FUTURENET, type InvalidateMarketParams, type Market, MarketStatus, Outcome, PLACEHOLDER_CONTRACT_ID, type Position, RESOLVE_ERROR_NUMBERS, RESOLVE_EVENT_NAMES, ResolveClient, type ResolveClientOptions, type ResolveDeployment, ResolveError, ResolveErrorCode, ResolveEventName, type ResolveMarketParams, type ResolveNetworkConfig, Side, type StakeParams, TESTNET, TESTNET_CONTRACT_ID, TESTNET_SETTLEMENT_TOKEN_ID, type TxMethodOptions, assertContractId, claimedTopics, decodeEventTopic, fromContractAmount, mapMarket, mapPosition, marketCreatedTopics, marketInvalidatedTopics, marketResolvedTopics, networks, parseClaimKind, parseDeployment, parseOutcome, parseResolveError, parseSide, resolveErrorCodeFromNumber, resolveErrorTypes, scValHelpers, stakedTopics, toContractAmount, validateCreateMarket, withContractId };

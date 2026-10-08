@@ -177,6 +177,8 @@ function resolveErrorTypes() {
   return out;
 }
 var PLACEHOLDER_CONTRACT_ID = "CXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+var TESTNET_CONTRACT_ID = "CD3YJNAYKVKT72DYPVS644OPNVNW6673TUIQWGXXA4VQD7536ARWB6MZ";
+var TESTNET_SETTLEMENT_TOKEN_ID = "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC";
 function assertContractId(contractId) {
   if (!contractId || contractId === PLACEHOLDER_CONTRACT_ID) {
     throw new Error(
@@ -191,7 +193,7 @@ var TESTNET = {
   networkPassphrase: stellarSdk.Networks.TESTNET,
   rpcUrl: "https://soroban-testnet.stellar.org",
   horizonUrl: "https://horizon-testnet.stellar.org",
-  contractId: PLACEHOLDER_CONTRACT_ID
+  contractId: TESTNET_CONTRACT_ID
 };
 var FUTURENET = {
   networkPassphrase: stellarSdk.Networks.FUTURENET,
@@ -213,6 +215,8 @@ var networks = {
   futurenet: FUTURENET,
   withContractId,
   PLACEHOLDER_CONTRACT_ID,
+  TESTNET_CONTRACT_ID,
+  TESTNET_SETTLEMENT_TOKEN_ID,
   assertContractId
 };
 
@@ -840,6 +844,8 @@ exports.ResolveErrorCode = ResolveErrorCode;
 exports.ResolveEventName = ResolveEventName;
 exports.Side = Side;
 exports.TESTNET = TESTNET;
+exports.TESTNET_CONTRACT_ID = TESTNET_CONTRACT_ID;
+exports.TESTNET_SETTLEMENT_TOKEN_ID = TESTNET_SETTLEMENT_TOKEN_ID;
 exports.assertContractId = assertContractId;
 exports.claimedTopics = claimedTopics;
 exports.decodeEventTopic = decodeEventTopic;
