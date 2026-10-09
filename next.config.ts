@@ -3,6 +3,14 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@resolve-protocol/sdk"],
+  async rewrites() {
+    return [
+      {
+        source: "/api/indexer/:path*",
+        destination: "https://resolve-indexer.onrender.com/:path*",
+      },
+    ];
+  },
   async headers() {
     return [
       {

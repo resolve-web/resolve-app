@@ -8,7 +8,7 @@
 
 ## Environment
 
-Copy the contract manifest values into the matching `NEXT_PUBLIC_*` variables. Set the indexer `CORS_ORIGINS` to the final app origin before deploying the browser application.
+Copy the contract manifest values into the matching `NEXT_PUBLIC_*` variables. For production, set `NEXT_PUBLIC_INDEXER_API_URL=/api/indexer`; the app proxies that same-origin path to the public indexer. Direct browser access is also supported when the indexer `CORS_ORIGINS` contains the final app origin.
 
 All `NEXT_PUBLIC_*` values are visible to users. Never place wallet secrets, source account seeds, API secrets, or signing material in them.
 
