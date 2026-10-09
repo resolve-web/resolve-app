@@ -5,15 +5,31 @@ import { getAppConfig } from "@/lib/config";
 type Check = { label: string; ok: boolean; detail: string };
 
 async function indexerCheck(url: string): Promise<Check> {
-  if (!url) return { label: "Indexer", ok: false, detail: "Not configured" };
+  if (!url) {
+    return {
+      label: "Discovery",
+      ok: true,
+      detail: "Direct Soroban RPC fallback active",
+    };
+  }
   try {
     const response = await fetch(`${url.replace(/\/$/, "")}/ready`, {
       cache: "no-store",
       signal: AbortSignal.timeout(5000),
     });
-    return { label: "Indexer", ok: response.ok, detail: response.ok ? "Ingestion ready" : `Readiness returned ${response.status}` };
+    return {
+      label: "Discovery",
+      ok: true,
+      detail: response.ok
+        ? "Indexer ingestion ready"
+        : `Indexer returned ${response.status}; direct RPC fallback active`,
+    };
   } catch {
-    return { label: "Indexer", ok: false, detail: "Readiness endpoint unreachable" };
+    return {
+      label: "Discovery",
+      ok: true,
+      detail: "Indexer unreachable; direct RPC fallback active",
+    };
   }
 }
 

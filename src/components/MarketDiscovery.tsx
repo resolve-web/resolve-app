@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { fetchMarketsFromContract } from "@/lib/discovery";
 import { fetchMarkets } from "@/lib/indexer";
 import type { IndexerMarket } from "@/lib/market-status";
-import { mapIndexerError } from "@/lib/errors";
+import { mapRpcReadError } from "@/lib/errors";
 import { hasIndexer, getAppConfig } from "@/lib/config";
 import { MarketCard } from "./MarketCard";
 import { EmptyState, ErrorState, LoadingState } from "./States";
@@ -17,31 +18,38 @@ export function MarketDiscovery() {
     null,
   );
   const [loading, setLoading] = useState(true);
+  const [source, setSource] = useState<"indexer" | "contract" | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
 
-    if (!hasIndexer()) {
-      setMarkets(null);
-      setError({
-        title: "Indexer not configured",
-        message:
-          "Set NEXT_PUBLIC_INDEXER_API_URL to discover markets. This app will not invent market lists.",
-      });
-      setLoading(false);
-      return;
-    }
-
     try {
-      const res = await fetchMarkets({
-        status: filter === "all" ? undefined : filter,
-        limit: 50,
-      });
-      setMarkets(res.markets);
+      if (hasIndexer()) {
+        try {
+          const res = await fetchMarkets({
+            status: filter === "all" ? undefined : filter,
+            limit: 50,
+          });
+          setMarkets(res.markets);
+          setSource("indexer");
+          return;
+        } catch {
+          // The contract is authoritative and remains available if discovery is down.
+        }
+      }
+
+      const contractMarkets = await fetchMarketsFromContract(50);
+      setMarkets(
+        filter === "all"
+          ? contractMarkets
+          : contractMarkets.filter((market) => market.status === filter),
+      );
+      setSource("contract");
     } catch (err) {
-      const mapped = mapIndexerError(err);
+      const mapped = mapRpcReadError(err);
       setMarkets(null);
+      setSource(null);
       setError({ title: mapped.title, message: mapped.message });
     } finally {
       setLoading(false);
@@ -62,8 +70,8 @@ export function MarketDiscovery() {
             Markets
           </h1>
           <p className="mt-2 max-w-xl text-sm text-ink-soft">
-            Binary YES/NO markets indexed from on-chain events. Settlement always
-            goes through the contract — the indexer is discovery only.
+            Binary YES/NO markets read from the indexer when available, with an
+            authoritative contract fallback. Settlement always goes through the contract.
           </p>
         </div>
         <div className="flex gap-1 text-sm" role="tablist" aria-label="Filter">
@@ -86,13 +94,17 @@ export function MarketDiscovery() {
         </div>
       </div>
 
-      {indexerUrl ? (
+      {source ? (
         <p className="mt-3 text-xs text-ink-faint">
-          Indexer: <span className="font-mono">{indexerUrl}</span>
+          Source: {source === "indexer" ? (
+            <>indexer <span className="font-mono">{indexerUrl}</span></>
+          ) : (
+            "Soroban RPC"
+          )}
         </p>
       ) : null}
 
-      {loading ? <LoadingState label="Loading markets from indexer…" /> : null}
+      {loading ? <LoadingState label="Loading markets…" /> : null}
 
       {!loading && error ? (
         <div className="mt-8">
@@ -108,7 +120,7 @@ export function MarketDiscovery() {
         <div className="mt-8">
           <EmptyState
             title="No markets yet"
-            description="Create the first market, or wait for the indexer to catch up with contract events."
+            description="Create the first market to start trading."
           />
         </div>
       ) : null}
