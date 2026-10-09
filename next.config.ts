@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@resolve-protocol/sdk", "@creit.tech/stellar-wallets-kit"],
+  transpilePackages: ["@resolve-protocol/sdk"],
   async headers() {
     return [
       {

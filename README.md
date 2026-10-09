@@ -12,7 +12,7 @@ Wallet → resolve-app → @resolve-protocol/sdk → Soroban RPC → Resolve Con
 
 | Path | Role |
 |------|------|
-| Wallet | User auth + transaction signing (`@creit.tech/stellar-wallets-kit`) |
+| Wallet | User auth + transaction signing through the official Freighter API |
 | App | UI, validation, tx review, discovery |
 | SDK | Contract reads/writes |
 | RPC | Authoritative chain state |
@@ -25,7 +25,7 @@ Wallet → resolve-app → @resolve-protocol/sdk → Soroban RPC → Resolve Con
 - Next.js 15 (App Router) + TypeScript
 - Tailwind CSS
 - `@resolve-protocol/sdk` via `file:./vendor/resolve-sdk` (vendored build for deploy)
-- Stellar Wallets Kit for Freighter and other wallets
+- Official Freighter browser-wallet integration
 
 ## Pages
 
@@ -41,7 +41,7 @@ Wallet → resolve-app → @resolve-protocol/sdk → Soroban RPC → Resolve Con
 
 ### Prerequisites
 
-- Node.js 20+
+- Node.js 22.12+
 - SDK is vendored at `vendor/resolve-sdk` (refresh after SDK changes: build sibling `../resolve-sdk`, then copy `dist` + `package.json`)
 - Optional indexer running (default `http://localhost:3080`)
 
@@ -52,9 +52,7 @@ cp .env.example .env.local
 # set NEXT_PUBLIC_SOROBAN_RPC_URL, NEXT_PUBLIC_RESOLVE_CONTRACT_ID,
 # NEXT_PUBLIC_SETTLEMENT_TOKEN_ID, NEXT_PUBLIC_INDEXER_API_URL, etc.
 
-npm install
-# On Windows, if a nested package postinstall fails with `yarn setup || true`:
-#   npm install --ignore-scripts
+npm ci
 
 npm run dev
 ```

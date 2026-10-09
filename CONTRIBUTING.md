@@ -5,13 +5,13 @@ Thanks for helping improve the Resolve reference web application.
 ## Development
 
 1. Ensure sibling packages are available:
-   - `../resolve-sdk` — build with `npm install && npm run build`
+   - `../resolve-sdk` — build with `npm ci && npm run build`
    - `../resolve-indexer` — optional for market discovery
 2. From `resolve-app`:
    ```bash
    cp .env.example .env.local
    # fill NEXT_PUBLIC_* values
-   npm install
+   npm ci
    npm run dev
    ```
 3. Before opening a PR:
