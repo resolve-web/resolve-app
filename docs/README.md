@@ -1,5 +1,7 @@
 # Resolve Documentation
 
+![Resolve logo](assets/resolve-logo.png)
+
 Resolve is a binary YES/NO prediction-market protocol running on Stellar Testnet. Users create markets, stake a SEP-41 token, and claim proportional payouts after resolution.
 
 ## Live project
@@ -18,4 +20,6 @@ Resolve is a testnet preview. The contracts are unaudited and must not be presen
 - [resolve-sdk](https://github.com/resolve-web/resolve-sdk)
 - [resolve-indexer](https://github.com/resolve-web/resolve-indexer)
 
-Continue with the [architecture](architecture.md), [user guide](user-guide.md), or [verified deployment](deployment.md).
+Continue with the [architecture](architecture.md), [user guide](user-guide.md), or [deployment and release checklist](deployment.md).
+
+Maintainers preparing a Stellar Wave application should also use the [maintainer checklist](maintainers.md) and the [deployed demo runbook](DEMO.md).

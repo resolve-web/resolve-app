@@ -1,5 +1,7 @@
 # Resolve App
 
+![Resolve logo](public/resolve-logo.png)
+
 Reference web application for **Resolve** — binary YES/NO prediction markets on Stellar (Soroban).
 
 ## Architecture
@@ -89,7 +91,7 @@ NEXT_PUBLIC_SETTLEMENT_TOKEN_ID=
 The app handles disconnected, connecting, wrong network, rejected signatures, failed transactions, pending confirmation, confirmed, insufficient balance, and mapped contract errors (`parseResolveError`). Stake, create, and claim flows show a **review summary** before the wallet prompt.
 
 For a repeatable submission recording, follow the [demo runbook](docs/DEMO.md).
-Use the [deployment checklist](docs/DEPLOYMENT.md) as the release gate for the public build.
+Use the [deployment checklist](docs/deployment.md) as the release gate for the public build.
 
 ## License
 
