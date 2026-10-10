@@ -1,0 +1,12 @@
+$schema: https://api.gitbook.com/gitbook-docs.yaml
+version: 1
+site:
+  title: Resolve Documentation
+  structure:
+    - type: space
+      key: resolve-documentation
+      title: Resolve Documentation
+      path: docs
+      default: true
+      content:
+        directory: ./docs
