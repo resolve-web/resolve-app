@@ -17,12 +17,26 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://resolveit-app.vercel.app"),
   title: {
     default: "Resolve",
     template: "%s · Resolve",
   },
   description:
     "Binary YES/NO prediction markets on Stellar. Settlement is on-chain; the indexer is discovery only.",
+  applicationName: "Resolve",
+  icons: {
+    icon: "/resolve-logo.png",
+    apple: "/resolve-logo.png",
+  },
+  openGraph: {
+    title: "Resolve",
+    description:
+      "Binary YES/NO prediction markets with on-chain settlement on Stellar.",
+    type: "website",
+    url: "https://resolveit-app.vercel.app",
+    images: [{ url: "/resolve-logo.png", width: 512, height: 512 }],
+  },
 };
 
 export default function RootLayout({

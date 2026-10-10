@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { WalletButton } from "./WalletButton";
 
@@ -12,13 +13,23 @@ export function Header() {
   return (
     <header className="border-b border-ink-line bg-paper/90 backdrop-blur-sm">
       <div className="mx-auto flex max-w-content items-center justify-between gap-6 px-4 py-4 sm:px-6">
-        <div className="flex items-baseline gap-8">
-          <Link href="/" className="group">
-            <span className="font-serif text-2xl tracking-tight text-ink">
-              Resolve
-            </span>
-            <span className="ml-2 hidden text-xs uppercase tracking-[0.18em] text-ink-faint sm:inline">
-              Markets
+        <div className="flex items-center gap-8">
+          <Link href="/" className="group flex items-center gap-2.5" aria-label="Resolve home">
+            <Image
+              src="/resolve-logo.png"
+              alt=""
+              width={36}
+              height={36}
+              priority
+              className="h-9 w-9 object-contain"
+            />
+            <span>
+              <span className="font-serif text-2xl tracking-tight text-ink">
+                Resolve
+              </span>
+              <span className="ml-2 hidden text-xs uppercase tracking-[0.18em] text-ink-faint sm:inline">
+                Markets
+              </span>
             </span>
           </Link>
           <nav className="hidden items-center gap-5 sm:flex" aria-label="Primary">
