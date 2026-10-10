@@ -17,6 +17,7 @@
 
 - Application: <https://resolveit-app.vercel.app>
 - Deployment status: <https://resolveit-app.vercel.app/status>
+- Documentation: <https://entity-6.gitbook.io/resolve-documentation/>
 - Indexer health: <https://resolve-indexer.onrender.com/health>
 - Indexer readiness: <https://resolve-indexer.onrender.com/ready>
 - Contract explorer: <https://stellar.expert/explorer/testnet/contract/CD3YJNAYKVKT72DYPVS644OPNVNW6673TUIQWGXXA4VQD7536ARWB6MZ>

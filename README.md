@@ -92,6 +92,7 @@ The app handles disconnected, connecting, wrong network, rejected signatures, fa
 
 For a repeatable submission recording, follow the [demo runbook](docs/DEMO.md).
 Use the [deployment checklist](docs/deployment.md) as the release gate for the public build.
+Read the published [Resolve documentation](https://entity-6.gitbook.io/resolve-documentation/) for the hosted guide, maintainer checklist, and submission evidence.
 
 ## License
 
