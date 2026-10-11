@@ -1,7 +1,10 @@
 import { StrKey } from "@stellar/stellar-sdk";
 
 import { getAppConfig } from "@/lib/config";
-import { resolveIndexerOrigin } from "@/lib/indexer-endpoint";
+import {
+  fetchIndexerWithFallback,
+  resolveIndexerOrigins,
+} from "@/lib/indexer-endpoint";
 
 type Check = { label: string; ok: boolean; detail: string };
 
@@ -16,11 +19,13 @@ async function indexerCheck(url: string): Promise<Check> {
     };
   }
   try {
-    const origin = resolveIndexerOrigin(url);
-    const response = await fetch(`${origin}/ready`, {
-      cache: "no-store",
-      signal: AbortSignal.timeout(15000),
-    });
+    const { origin, response } = await fetchIndexerWithFallback(
+      "/ready",
+      {
+        cache: "no-store",
+      },
+      resolveIndexerOrigins(url),
+    );
     return {
       label: "Discovery",
       ok: true,

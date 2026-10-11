@@ -20,6 +20,7 @@
 - Documentation: <https://entity-6.gitbook.io/resolve-documentation/>
 - Indexer health: <https://resolve-indexer.onrender.com/health>
 - Indexer readiness: <https://resolve-indexer.onrender.com/ready>
+- Fallback indexer readiness: <https://resolve-indexer-r4fs.onrender.com/ready>
 - Contract explorer: <https://stellar.expert/explorer/testnet/contract/CD3YJNAYKVKT72DYPVS644OPNVNW6673TUIQWGXXA4VQD7536ARWB6MZ>
 - Contract releases: <https://github.com/resolve-web/resolve-contract/releases>
 
