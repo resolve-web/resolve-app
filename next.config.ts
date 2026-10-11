@@ -3,14 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@resolve-protocol/sdk"],
-  async rewrites() {
-    return [
-      {
-        source: "/api/indexer/:path*",
-        destination: "https://resolve-indexer.onrender.com/:path*",
-      },
-    ];
-  },
   async headers() {
     return [
       {
@@ -24,7 +16,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob:",
               "font-src 'self' data:",
-              "connect-src 'self' https://soroban-testnet.stellar.org https://horizon-testnet.stellar.org https://resolve-indexer.onrender.com",
+              "connect-src 'self' https://soroban-testnet.stellar.org https://horizon-testnet.stellar.org https://resolve-indexer.onrender.com https://resolve-indexer-r4fs.onrender.com",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",

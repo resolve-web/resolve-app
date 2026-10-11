@@ -10,11 +10,12 @@
 | Application | <https://resolveit-app.vercel.app> |
 | App status | <https://resolveit-app.vercel.app/status> |
 | Indexer readiness | <https://resolve-indexer.onrender.com/ready> |
+| Fallback indexer readiness | <https://resolve-indexer-r4fs.onrender.com/ready> |
 | Contract release | [GitHub releases](https://github.com/resolve-web/resolve-contract/releases) |
 
 ## Environment
 
-Copy the contract manifest values into the matching `NEXT_PUBLIC_*` variables. In production, set `NEXT_PUBLIC_INDEXER_API_URL=/api/indexer`; the app proxies that same-origin path to the public indexer. `INDEXER_API_URL` is an optional server-only override for the status-page health check.
+Copy the contract manifest values into the matching `NEXT_PUBLIC_*` variables. In production, set `NEXT_PUBLIC_INDEXER_API_URL=/api/indexer`; the app proxies that same-origin path to the primary indexer and fails over to the fallback service on network errors, rate limits, timeouts, and server errors. `INDEXER_API_URL` and `INDEXER_FALLBACK_API_URL` are optional server-only overrides.
 
 All `NEXT_PUBLIC_*` values are visible to users. Never place wallet seeds, source-account secrets, API credentials, or signing material in them.
 
